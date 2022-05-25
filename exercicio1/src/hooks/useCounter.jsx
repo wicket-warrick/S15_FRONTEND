@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
-const useCounter = (init) => {
+const useCounter = (init = 0) => {
   const [value, setValue] = useState(init);
   useEffect(() => {
     setValue(init);
   }, [init]);
+  useEffect(() => {
+    document.title = `valor del contador ${value}`;
+  }, [value]);
 
   const add = () => {
     setValue(value + 1);

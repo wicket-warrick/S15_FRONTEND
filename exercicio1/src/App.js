@@ -1,10 +1,11 @@
 import { useState } from "react";
 import "./App.css";
-import useCounter from "./hooks/counter";
+import useCounter from "./hooks/useCounter";
 
 function App() {
   const [initialValue, setInitialValue] = useState(0);
   const { value, add, substract, message } = useCounter(initialValue);
+
   const getInitialValue = (e) => {
     e.preventDefault();
     setInitialValue(parseInt(e.target.elements[0].value));

@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-export const Form = ({ content, setContent }) => {
+export const Form = ({ setContent }) => {
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
   const [post, setPost] = useState({
     title: "",
     body: "",
@@ -17,6 +19,7 @@ export const Form = ({ content, setContent }) => {
   };
 
   const upLoadArticle = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const article = await fetch(
@@ -34,14 +37,25 @@ export const Form = ({ content, setContent }) => {
         }
       );
       if (!article.ok) {
-        throw new Error("could not post data to API");
+        setError("could not post data to API");
+        return;
+      }
+      if (!post.title || !post.body || !post.userId) {
+        setError("formulario incorrecto");
+        return;
       }
       const articleUpload = await article.json();
 
-      const newContent = [...content, articleUpload];
-      setContent(newContent);
+      // const newContent = [...content, articleUpload];
+      setContent((content) => {
+        return [...content, articleUpload];
+      });
+      setError("");
+      setPost({ title: "", body: "", userId: "" });
     } catch (error) {
-      console.error(error.message);
+      setError("could not POST data ");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -81,6 +95,8 @@ export const Form = ({ content, setContent }) => {
         onChange={handleChange}
       />
       <button>subir arituclo</button>
+      {loading ? <p>Enviando datos...</p> : null}
+      {error ? <p>{error}</p> : null}
     </form>
   );
 };

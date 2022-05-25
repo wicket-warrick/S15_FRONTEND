@@ -1,14 +1,19 @@
-import { nanoid } from "nanoid";
 export const List = ({ content }) => {
-  return content
-    .slice(0)
-    .reverse()
-    .map((post) => {
-      return (
-        <li key={nanoid(10)}>
-          <h2>{post.title}</h2>
-          <p>{post.body}</p>
-        </li>
-      );
-    });
+  return content.length ? (
+    <ul>
+      {content
+        .slice(0)
+        .reverse()
+        .map((post, index) => {
+          return (
+            <li key={index}>
+              <h2>{post.title}</h2>
+              <p>{post.body}</p>
+            </li>
+          );
+        })}
+    </ul>
+  ) : (
+    <p>no results</p>
+  );
 };
